@@ -1,0 +1,14 @@
+{
+    "epochs": 50,
+    "n_tasks": 7020,
+    "n_features": 600,
+    "layer_sizes": [
+        1000,
+        2000,
+        3000
+    ],
+    "dropouts": 0,
+    "learning_rate": 0.0001,
+    "batch_size": 200,
+    "model_path": "/SpecToMol/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/SLF2_no_norm_tuned_15/SLF2_no_norm_tuned_15_100/SLF2_no_norm_tuned_15_100_model"
+}

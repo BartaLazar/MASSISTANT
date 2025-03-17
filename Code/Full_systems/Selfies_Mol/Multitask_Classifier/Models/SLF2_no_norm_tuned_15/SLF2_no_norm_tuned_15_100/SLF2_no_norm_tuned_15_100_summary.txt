@@ -1,0 +1,33 @@
+Model SLF2_no_norm_tuned_15_100 
+
+Model path: /SpecToMol/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/SLF2_no_norm_tuned_15/SLF2_no_norm_tuned_15_100/SLF2_no_norm_tuned_15_100_model
+--------------------------------------------------
+Training epochs: 50
+Training set size: 144205
+Subset size: 100%
+--------------------------------------------------
+Tuned hyperparameters:
+--------------------------------------------------
+Batch size: 200
+Layer sizes: [1000, 2000, 3000]
+Learning rate: 0.0001
+Dropouts: 0
+--------------------------------------------------
+Average loss: 0.001461947411298752
+
+
+
+2025-02-21 00:44:09.803411
+
+BITWISE EVALUATION OF TEST_DATASET CONTAINING: 36052 MOLECULES
+--------------------------------------------------------------------
+TRUE POS:    AVG=71%    STDEV=20    CV%=28
+FALSE POS:   AVG=22%    STDEV=17    CV%=77
+
+
+2025-02-21 01:07:24.116439
+Correct smiles predictions: 3768 (=10%). Test set contains in total 36052 compounds.
+Tanimoto similarity >= 1.0: 3949 (=10%). Test set contains in total 36052 compounds.
+Tanimoto similarity >= 0.9: 4316 (=11%). Test set contains in total 36052 compounds.
+Tanimoto similarity >= 0.6: 6113 (=16%). Test set contains in total 36052 compounds.
+The Tanimoto similarity is calculated using the RDKit Fingerprint and the Dice similarity metric.

@@ -1,0 +1,33 @@
+Model SLF2_tuned_49_100 
+
+Model path: /SpecToMol/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/SLF2_tuned_49/SLF2_tuned_49_100/SLF2_tuned_49_100_model
+--------------------------------------------------
+Training epochs: 50
+Training set size: 144205
+Subset size: 100%
+--------------------------------------------------
+Tuned hyperparameters:
+--------------------------------------------------
+Batch size: 50
+Layer sizes: [2000, 3000]
+Learning rate: 0.001
+Dropouts: 0
+--------------------------------------------------
+Average loss: 0.00641201913356781
+
+
+
+2025-02-05 07:39:45.884091
+
+BITWISE EVALUATION OF TEST_DATASET CONTAINING: 36052 MOLECULES
+--------------------------------------------------------------------
+TRUE POS:    AVG=66%    STDEV=20    CV%=30
+FALSE POS:   AVG=13%    STDEV=13    CV%=99
+
+
+2025-02-05 07:52:28.669713
+Correct smiles predictions: 1558 (=4%). Test set contains in total 36052 compounds.
+Tanimoto similarity >= 1.0: 1686 (=4%). Test set contains in total 36052 compounds.
+Tanimoto similarity >= 0.9: 1974 (=5%). Test set contains in total 36052 compounds.
+Tanimoto similarity >= 0.6: 3421 (=9%). Test set contains in total 36052 compounds.
+The Tanimoto similarity is calculated using the RDKit Fingerprint and the Dice similarity metric.

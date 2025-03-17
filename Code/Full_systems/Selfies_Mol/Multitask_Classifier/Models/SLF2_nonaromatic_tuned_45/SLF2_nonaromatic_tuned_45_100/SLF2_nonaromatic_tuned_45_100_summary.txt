@@ -1,0 +1,33 @@
+Model SLF2_nonaromatic_tuned_45_100 
+
+Model path: /SpecToMol/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/SLF2_nonaromatic_tuned_45/SLF2_nonaromatic_tuned_45_100/SLF2_nonaromatic_tuned_45_100_model
+--------------------------------------------------
+Training epochs: 50
+Training set size: 52276
+Subset size: 100%
+--------------------------------------------------
+Tuned hyperparameters:
+--------------------------------------------------
+Batch size: 200
+Layer sizes: [1000, 2000, 3000]
+Learning rate: 0.0001
+Dropouts: 0
+--------------------------------------------------
+Average loss: 0.0007156511396169663
+
+
+
+2025-02-19 02:42:09.926231
+
+BITWISE EVALUATION OF TEST_DATASET CONTAINING: 13070 MOLECULES
+--------------------------------------------------------------------
+TRUE POS:    AVG=84%    STDEV=16    CV%=19
+FALSE POS:   AVG=10%    STDEV=13    CV%=129
+
+
+2025-02-19 02:45:25.283903
+Correct smiles predictions: 4179 (=31%). Test set contains in total 13070 compounds.
+Tanimoto similarity >= 1.0: 4359 (=33%). Test set contains in total 13070 compounds.
+Tanimoto similarity >= 0.9: 4624 (=35%). Test set contains in total 13070 compounds.
+Tanimoto similarity >= 0.6: 5744 (=43%). Test set contains in total 13070 compounds.
+The Tanimoto similarity is calculated using the RDKit Fingerprint and the Dice similarity metric.

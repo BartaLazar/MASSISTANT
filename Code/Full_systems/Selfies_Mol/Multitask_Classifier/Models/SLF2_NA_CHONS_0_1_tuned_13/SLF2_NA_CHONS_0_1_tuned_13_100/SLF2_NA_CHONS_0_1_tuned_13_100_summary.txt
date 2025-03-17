@@ -1,0 +1,33 @@
+Model SLF2_NA_CHONS_0_1_tuned_13_100 
+
+Model path: /SpecToMol/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/SLF2_NA_CHONS_0_1_tuned_13/SLF2_NA_CHONS_0_1_tuned_13_100/SLF2_NA_CHONS_0_1_tuned_13_100_model
+--------------------------------------------------
+Training epochs: 50
+Training set size: 12275
+Subset size: 100%
+--------------------------------------------------
+Tuned hyperparameters:
+--------------------------------------------------
+Batch size: 100
+Layer sizes: [1000, 2000, 3000]
+Learning rate: 0.0001
+Dropouts: 0
+--------------------------------------------------
+Average loss: 0.00048696484416723253
+
+
+
+2025-02-17 09:58:05.088726
+
+BITWISE EVALUATION OF TEST_DATASET CONTAINING: 3069 MOLECULES
+--------------------------------------------------------------------
+TRUE POS:    AVG=90%    STDEV=11    CV%=12
+FALSE POS:   AVG=5%    STDEV=8    CV%=159
+
+
+2025-02-17 09:58:36.090891
+Correct smiles predictions: 1308 (=42%). Test set contains in total 3069 compounds.
+Tanimoto similarity >= 1.0: 1387 (=45%). Test set contains in total 3069 compounds.
+Tanimoto similarity >= 0.9: 1458 (=47%). Test set contains in total 3069 compounds.
+Tanimoto similarity >= 0.6: 1782 (=58%). Test set contains in total 3069 compounds.
+The Tanimoto similarity is calculated using the RDKit Fingerprint and the Dice similarity metric.

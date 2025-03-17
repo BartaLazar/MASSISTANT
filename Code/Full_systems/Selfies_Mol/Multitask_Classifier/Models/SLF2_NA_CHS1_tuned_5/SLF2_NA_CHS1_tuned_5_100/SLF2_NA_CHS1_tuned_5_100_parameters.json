@@ -1,0 +1,13 @@
+{
+    "epochs": 50,
+    "n_tasks": 1860,
+    "n_features": 600,
+    "layer_sizes": [
+        3000,
+        2000
+    ],
+    "dropouts": 0,
+    "learning_rate": 0.0001,
+    "batch_size": 100,
+    "model_path": "/SpecToMol/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/SLF2_NA_CHS1_tuned_5/SLF2_NA_CHS1_tuned_5_100/SLF2_NA_CHS1_tuned_5_100_model"
+}
