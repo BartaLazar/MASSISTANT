@@ -8,6 +8,9 @@
 *.keras
 *.pt
 
+# Ignore .done
+*.done
+
 
 # Ignore the models
 /Model/
