@@ -1,0 +1,27 @@
+{
+    "true_positives": {
+        "avg": -1,
+        "stdev": -1,
+        "cv": -1
+    },
+    "false_positives": {
+        "avg": -1,
+        "stdev": -1,
+        "cv": -1
+    },
+    "prediction_rates": {
+        "correct": 33.13927451858486,
+        "100%+": 35.15450067174205,
+        "90%+": 37.12494402149575,
+        "60%+": 42.67801164352888
+    },
+    "prediction_values": {
+        "correct": 740,
+        "100%+": 785,
+        "90%+": 829,
+        "60%+": 953
+    },
+    "test_size": 2233,
+    "fingerprint_similarity": 0.5378839503401122,
+    "SELFIES_similarity": 0.6253682165829828
+}
