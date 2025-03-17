@@ -1,0 +1,33 @@
+Model SLF2_aromatic_tuned_15_100 
+
+Model path: /SpecToMol/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/SLF2_aromatic_tuned_15/SLF2_aromatic_tuned_15_100/SLF2_aromatic_tuned_15_100_model
+--------------------------------------------------
+Training epochs: 50
+Training set size: 91928
+Subset size: 100%
+--------------------------------------------------
+Tuned hyperparameters:
+--------------------------------------------------
+Batch size: 200
+Layer sizes: [1000, 2000, 3000]
+Learning rate: 0.0001
+Dropouts: 0
+--------------------------------------------------
+Average loss: 0.0016014881432056427
+
+
+
+2025-02-23 07:23:56.580856
+
+BITWISE EVALUATION OF TEST_DATASET CONTAINING: 22983 MOLECULES
+--------------------------------------------------------------------
+TRUE POS:    AVG=64%    STDEV=19    CV%=29
+FALSE POS:   AVG=27%    STDEV=17    CV%=62
+
+
+2025-02-23 07:37:01.822795
+Correct smiles predictions: 1238 (=5%). Test set contains in total 22983 compounds.
+Tanimoto similarity >= 1.0: 1250 (=5%). Test set contains in total 22983 compounds.
+Tanimoto similarity >= 0.9: 1339 (=5%). Test set contains in total 22983 compounds.
+Tanimoto similarity >= 0.6: 1776 (=7%). Test set contains in total 22983 compounds.
+The Tanimoto similarity is calculated using the RDKit Fingerprint and the Dice similarity metric.
