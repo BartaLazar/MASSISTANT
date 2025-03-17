@@ -11,6 +11,9 @@
 # Ignore .done
 *.done
 
+# Ignore .ipynb_checkpoints
+.ipynb_checkpoints/
+
 
 # Ignore the models
 /Model/
