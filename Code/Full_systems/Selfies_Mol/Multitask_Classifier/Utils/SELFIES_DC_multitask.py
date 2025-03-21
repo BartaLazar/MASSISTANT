@@ -16,7 +16,7 @@ import selfies as sf
 from tqdm.notebook import tqdm
 import deepchem as dc
 import json
-from Code.Full_systems.Selfies_Mol.Multitask_Classifier.Utils.progress_callback	import ProgressBarCallback
+from Code.Full_systems.Selfies_Mol.Multitask_Classifier.Utils.progress_callback import ProgressBarCallback
 from statistics import mean, stdev
 from datetime import datetime
 import torch
@@ -32,8 +32,9 @@ load_dotenv(f'{base}/.env')
 os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
 
 
-
-def DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=None, model_name_extension=None, nb_epochs=50, batch_size=50, layer_sizes=[3000,1000], learning_rate=0.001, dropouts=0.0, subset_size=1.0, debug=False):
+def DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=None, model_name_extension=None, nb_epochs=50,
+                     batch_size=50, layer_sizes=[3000, 1000], learning_rate=0.001, dropouts=0.0, subset_size=1.0,
+                     debug=False):
     '''
     :param X_train: Training data (Pandas DF)
     :param y_train: Training labels (Pandas DF)
@@ -70,7 +71,7 @@ def DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=None, mod
             print(f'The trained model will be saved to {model_directory}')
             print(f'Model name: {model_name}')
 
-        #os.makedirs(model_directory, exist_ok=True)
+        # os.makedirs(model_directory, exist_ok=True)
 
         # Remove the directory and its contents if exists, so it can be overwritten
         if os.path.exists(model_directory):
@@ -85,13 +86,12 @@ def DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=None, mod
         train_dataset = dc.data.NumpyDataset(X_train, y_train)
         if debug: print('DeepChem datasets created')
 
-        #with open(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/selfies_group_dict.json', 'r') as json_file:
+        # with open(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/selfies_group_dict.json', 'r') as json_file:
         #    selfies_group_dict = json.load(json_file)
-        
+
         with open(f'{model_directory}/selfies_group_dict_{model_name}.json', 'w') as json_file:
             json.dump(selfies_group_dict, json_file, indent=4)
 
-        
         with open(model_summary_path, 'w') as file:  # 'w' will overwrite the file if it exists
             # write text into the file
             file.write(f"Model {model_name_full} \n\n")
@@ -108,7 +108,7 @@ def DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=None, mod
             file.write(f"Learning rate: {learning_rate}\n")
             file.write(f"Dropouts: {dropouts}\n")
             file.write('--------------------------------------------------\n')
-        
+
         model_parameters = {
             'epochs': nb_epochs,
             'n_tasks': y_train.shape[1],
@@ -116,8 +116,8 @@ def DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=None, mod
             'layer_sizes': layer_sizes,
             'dropouts': dropouts,
             'learning_rate': learning_rate,
-            'batch_size' : batch_size,
-            'model_path' : model_path
+            'batch_size': batch_size,
+            'model_path': model_path
         }
 
         with open(model_parameters_path, 'w') as json_file:
@@ -131,35 +131,36 @@ def DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=None, mod
             layer_sizes=layer_sizes,
             dropouts=dropouts,
             learning_rate=learning_rate,
-            batch_size = batch_size,
-            model_dir = model_path
+            batch_size=batch_size,
+            model_dir=model_path
         )
         steps_per_epoch = X_train.shape[0] // batch_size
-        progress_bar_callback = ProgressBarCallback(steps_per_epoch, nb_epochs, return_epochs=False, model_name=model_name_full)
+        progress_bar_callback = ProgressBarCallback(steps_per_epoch, nb_epochs, return_epochs=False,
+                                                    model_name=model_name_full)
 
         average_loss = model.fit(train_dataset, nb_epoch=nb_epochs, callbacks=[progress_bar_callback])
-        
 
         progress_bar_callback.close()
 
-        #model.save(model_path)
+        # model.save(model_path)
         if debug: print(f'Model saved to {model_path}')
 
-        with open(model_summary_path, 'a') as file: 
+        with open(model_summary_path, 'a') as file:
             # write text into the file
             file.write(f"Average loss: {average_loss}\n")
-        
+
         existed_before = False
 
         del model
         torch.cuda.empty_cache()
         gc.collect()
-    
+
     else:
         print(f'Model {model_name_full} already exists at {model_path}')
         existed_before = True
-    
+
     return existed_before
+
 
 def DC_multitask_predict(X_test, y_test, model_path=None, model_parameters_path=None):
     """
@@ -180,8 +181,8 @@ def DC_multitask_predict(X_test, y_test, model_path=None, model_parameters_path=
         layer_sizes=model_parameters['layer_sizes'],
         dropouts=model_parameters['dropouts'],
         learning_rate=model_parameters['learning_rate'],
-        batch_size = model_parameters['batch_size'],
-        model_dir = model_path
+        batch_size=model_parameters['batch_size'],
+        model_dir=model_path
     )
     model.restore()
 
@@ -192,7 +193,8 @@ def DC_multitask_predict(X_test, y_test, model_path=None, model_parameters_path=
     return predictions
 
 
-def eval_results(predictions, test_dataset, model_summary_path=None, encoding_length=None, print_results=True, debug=False):
+def eval_results(predictions, test_dataset, model_summary_path=None, encoding_length=None, print_results=True,
+                 debug=False):
     '''
     Evaluate the performance of the model on the test dataset.
     :param predictions: Predictions of the model
@@ -207,18 +209,19 @@ def eval_results(predictions, test_dataset, model_summary_path=None, encoding_le
     # NOT CORRECT YET!!
     # THE [nop] SHOULD NOT BE INCLUDED IN THE EVALUATION !!! (not an issue anymore, since it is a bitwise comparison)
 
-    if encoding_length is None: encoding_length = int(os.getenv("ENCODING_BITS"))*int(os.getenv("MAX_SELFIES_LENGTH"))
+    if encoding_length is None: encoding_length = int(os.getenv("ENCODING_BITS")) * int(os.getenv("MAX_SELFIES_LENGTH"))
 
-    tp=[] # true positive
-    fn=[] # false negative
-    fp=[] # false positive
-    pr=[] # total number of predicted bits
-    tp_p=[] # true pos %
-    fp_p=[] # false pos %
+    tp = []  # true positive
+    fn = []  # false negative
+    fp = []  # false positive
+    pr = []  # total number of predicted bits
+    tp_p = []  # true pos %
+    fp_p = []  # false pos %
 
-    cutoff = 0.5    # predicted >= 0.5 will turn bit=1
+    cutoff = 0.5  # predicted >= 0.5 will turn bit=1
 
-    for q in tqdm(range(len(test_dataset)), desc='Loop over all test molecules', unit='molecule'):   # loop over all test molecules
+    for q in tqdm(range(len(test_dataset)), desc='Loop over all test molecules',
+                  unit='molecule'):  # loop over all test molecules
 
         # get predicted fingerprint of molecule q
         pred = []
@@ -232,50 +235,50 @@ def eval_results(predictions, test_dataset, model_summary_path=None, encoding_le
         real = test_dataset.y[q]
 
         bit = 0
-        a=0
-        b=0
-        c=0
-        d=0
-        e=0
+        a = 0
+        b = 0
+        c = 0
+        d = 0
+        e = 0
 
         for i in range(encoding_length):
-            if real[i]==1 and pred[i]==1:     # true pos (correct prediction)
-                a=a+1
-            if real[i]==1 and pred[i]==0:     # false neg (missed)
-                b=b+1
-            if real[i]==0 and pred[i]==1:     # false pos (not correct)
-                c=c+1
-            if real[i]==1: # count number of 'on-bits'
-                d=d+1
-            if pred[i]==1: # count number of predicted 'on-bits'
-                e=e+1
-        
+            if real[i] == 1 and pred[i] == 1:  # true pos (correct prediction)
+                a = a + 1
+            if real[i] == 1 and pred[i] == 0:  # false neg (missed)
+                b = b + 1
+            if real[i] == 0 and pred[i] == 1:  # false pos (not correct)
+                c = c + 1
+            if real[i] == 1:  # count number of 'on-bits'
+                d = d + 1
+            if pred[i] == 1:  # count number of predicted 'on-bits'
+                e = e + 1
+
         epsilon = 10e-7
-        
+
         tp.append(a)  # true pos
         fn.append(b)  # false neg
         fp.append(c)  # false pos
         pr.append(e)  # number of predicted on-bits
-        fp_p.append(int(c/(e+epsilon)*100)) # false pos / predicted on-bits * 100%
-        tp_p.append(int(a/(d+epsilon)*100)) # true pos / real number on-bits * 100%
+        fp_p.append(int(c / (e + epsilon) * 100))  # false pos / predicted on-bits * 100%
+        tp_p.append(int(a / (d + epsilon) * 100))  # true pos / real number on-bits * 100%
 
     # % True positive average, stdev and cv% for all test molecules
     epsilon = 10e-7
-    tp_avg = int (mean(tp_p))
-    tp_sd = int (stdev(tp_p))
-    tp_cv = int (tp_sd/(tp_avg+epsilon)*100)
+    tp_avg = int(mean(tp_p))
+    tp_sd = int(stdev(tp_p))
+    tp_cv = int(tp_sd / (tp_avg + epsilon) * 100)
     if print_results:
-        print (f'BITWISE EVALUATION OF TEST_DATASET CONTAINING: {len(test_dataset)} MOLECULES')
-        print (f'--------------------------------------------------------------------')
-        print (f'TRUE POS:    AVG={tp_avg}%    STDEV={tp_sd}    CV%={tp_cv}')
+        print(f'BITWISE EVALUATION OF TEST_DATASET CONTAINING: {len(test_dataset)} MOLECULES')
+        print(f'--------------------------------------------------------------------')
+        print(f'TRUE POS:    AVG={tp_avg}%    STDEV={tp_sd}    CV%={tp_cv}')
 
     # % False positive average, stdev and cv% for all test molecules
-    fp_avg = int (mean(fp_p))
-    fp_sd = int (stdev(fp_p))
-    fp_cv = int (fp_sd/(fp_avg+epsilon)*100)
+    fp_avg = int(mean(fp_p))
+    fp_sd = int(stdev(fp_p))
+    fp_cv = int(fp_sd / (fp_avg + epsilon) * 100)
 
     if print_results:
-        print (f'FALSE POS:   AVG={fp_avg}%    STDEV={fp_sd}    CV%={fp_cv}')
+        print(f'FALSE POS:   AVG={fp_avg}%    STDEV={fp_sd}    CV%={fp_cv}')
 
     if model_summary_path is not None:
         with open(model_summary_path, 'a') as file:
@@ -285,7 +288,7 @@ def eval_results(predictions, test_dataset, model_summary_path=None, encoding_le
             file.write(f'--------------------------------------------------------------------\n')
             file.write(f'TRUE POS:    AVG={tp_avg}%    STDEV={tp_sd}    CV%={tp_cv}\n')
             file.write(f'FALSE POS:   AVG={fp_avg}%    STDEV={fp_sd}    CV%={fp_cv}\n')
-    
+
     res = {
         'true_positives': {
             'avg': -1,
@@ -302,7 +305,8 @@ def eval_results(predictions, test_dataset, model_summary_path=None, encoding_le
     return res
 
 
-def eval_model(predictions, selfies_group_dict, test_dataset, selfies_X_test, threshold=0.5, model_name=None, model_folder=None, model_summary_path=None, debug=False):
+def eval_model(predictions, selfies_group_dict, test_dataset, selfies_X_test, threshold=0.5, model_name=None,
+               model_folder=None, model_summary_path=None, debug=False):
     '''
     Evaluate the model based on the predictions and the test dataset.
     :param predictions: Predictions of the model
@@ -335,98 +339,100 @@ def eval_model(predictions, selfies_group_dict, test_dataset, selfies_X_test, th
     '''
 
     # create a dictionairy (itos) to transfer the hot-encoding array into a array of SELFIES and SMILES (transposed of the selfies_group_dict)
-    itos={}
-    c=0
+    itos = {}
+    c = 0
     for i in selfies_group_dict:
-        itos[selfies_group_dict[i]]=i
+        itos[selfies_group_dict[i]] = i
 
     # Evaluation whole test set
     # check if predicted smiles == real smiles
 
     cutoff = threshold
     hit = 0
-    score=[]
+    score = []
     to_print = []
 
-    columns = ['SMILES_Index', 'Original_SMILES', 'Predicted_SMILES', 'Original_SELFIES', 'Predicted_SELFIES', 'Fingerprint_SIMILARITY', 'SELFIES_SIMILARITY']
+    columns = ['SMILES_Index', 'Original_SMILES', 'Predicted_SMILES', 'Original_SELFIES', 'Predicted_SELFIES',
+               'Fingerprint_SIMILARITY', 'SELFIES_SIMILARITY']
     res_df = pd.DataFrame(columns=columns)
 
     epsilon = 10e-7
 
-    for test_compound_id in tqdm(range(len(test_dataset)), desc='Evaluate all test molecules', unit='molecule'):   # loop over all test molecules
+    for test_compound_id in tqdm(range(len(test_dataset)), desc='Evaluate all test molecules',
+                                 unit='molecule'):  # loop over all test molecules
         # create hot-encoding array of molecule id
         pred = []
         # thresholding the predictions
         for i in predictions[test_compound_id]:
-            if i[1] >= cutoff: #index 1 is for the porbability of the class being 1 (index 0 is the probability of the class being 0)
+            if i[
+                1] >= cutoff:  # index 1 is for the porbability of the class being 1 (index 0 is the probability of the class being 0)
                 pred.append(1)
             else:
                 pred.append(0)
 
-        predicted_selfies =''
+        predicted_selfies = ''
         a = len(pred)
         b = len(itos)
-        c = int (a/(b+epsilon))
+        c = int(a / (b + epsilon))
 
         # iterate through the indexes of the prediction (one prediction is the one hot encoding of a SELFIES part)
         for i in range(c):
             # iterate through the indexes of the itos dictionary (length of a one hot encoding)
             for q in range(b):
-                if pred[i*b+q]==1 and itos[q]!='[nop]':
+                if pred[i * b + q] == 1 and itos[q] != '[nop]':
                     # print (itos[q])
                     predicted_selfies = predicted_selfies + (itos[q])
                     # go to the encoding ot the next SELFIES part after the first 1 has been found for the one hot encoding
-                    #break
+                    # break
         predicted_smiles = sf.decoder(predicted_selfies)
 
         # real molecule
-        #compound_id = test_dataset.ids[test_compound_id]
+        # compound_id = test_dataset.ids[test_compound_id]
         real_selfies = selfies_X_test.loc[test_compound_id]
-        original_smiles = sf.decoder(real_selfies) # inferred from selfies
+        original_smiles = sf.decoder(real_selfies)  # inferred from selfies
 
-            # Convert SMILES to RDKit molecule object
+        # Convert SMILES to RDKit molecule object
         mol_a = Chem.MolFromSmiles(predicted_smiles)
         mol_b = Chem.MolFromSmiles(original_smiles)
-        
+
         # Only proceed if both molecules are valid
         if mol_a is not None and mol_b is not None:
             a = Chem.RDKFingerprint(mol_a)
             b = Chem.RDKFingerprint(mol_b)
             score.append(DataStructs.FingerprintSimilarity(a, b, metric=DataStructs.DiceSimilarity))
-            #to_print.append(f'{test_compound_id} ------- {predicted_smiles} -------- {original_smiles} {DataStructs.FingerprintSimilarity(a,b, metric=DataStructs.DiceSimilarity)}')
-            fingerprint_similarity = DataStructs.FingerprintSimilarity(a,b, metric=DataStructs.DiceSimilarity)
+            # to_print.append(f'{test_compound_id} ------- {predicted_smiles} -------- {original_smiles} {DataStructs.FingerprintSimilarity(a,b, metric=DataStructs.DiceSimilarity)}')
+            fingerprint_similarity = DataStructs.FingerprintSimilarity(a, b, metric=DataStructs.DiceSimilarity)
             selfies_similarity = NNUtils.selfies_similarity(real_selfies, predicted_selfies)
-            res_df.loc[test_compound_id] = [test_compound_id, original_smiles, predicted_smiles, real_selfies, predicted_selfies, fingerprint_similarity, selfies_similarity]
+            res_df.loc[test_compound_id] = [test_compound_id, original_smiles, predicted_smiles, real_selfies,
+                                            predicted_selfies, fingerprint_similarity, selfies_similarity]
 
-            
             if predicted_smiles == original_smiles:
                 hit = hit + 1
-            
+
         else:
-            #print("Invalid molecule found, skipping.")
+            # print("Invalid molecule found, skipping.")
             pass
-    
+
     avg_fingerprint_similarity = float(res_df['Fingerprint_SIMILARITY'].mean(skipna=True))
     avg_selfies_similarity = float(res_df['SELFIES_SIMILARITY'].mean(skipna=True))
-    
+
     if model_name is not None and model_folder is not None:
         filename = f"{model_folder}/{model_name}_predictions.csv"
         res_df.to_csv(filename)
 
         if debug: print(f'The predictions for model {model_name} have been saved to {filename}')
-    
 
     score = np.array(score)
-    sum_score_1 = sum(score>=1)
-    sum_score_09 = sum(score>=0.9)
-    sum_score_06 = sum(score>=0.6)
+    sum_score_1 = sum(score >= 1)
+    sum_score_09 = sum(score >= 0.9)
+    sum_score_06 = sum(score >= 0.6)
 
     res = {
         'prediction_simiarity_rates': {
-            'correct': hit/len(test_dataset.X)*100,
-            '100%+': sum_score_1/len(test_dataset.X)*100,
-            '90%+': sum_score_09/len(test_dataset.X)*100,
-            '60%+': sum_score_06/len(test_dataset.X)*100
+            'correct': hit / len(test_dataset.X) * 100,
+            '100%+': sum_score_1 / len(test_dataset.X) * 100,
+            '90%+': sum_score_09 / len(test_dataset.X) * 100,
+            '60%+': sum_score_06 / len(test_dataset.X) * 100
         },
         'prediction_similarity_values': {
             'correct': hit,
@@ -443,11 +449,16 @@ def eval_model(predictions, selfies_group_dict, test_dataset, selfies_X_test, th
         with open(model_summary_path, 'a') as file:
             file.write(f'\n\n')
             file.write(f'{datetime.now()}\n')
-            file.write(f'Correct smiles predictions: {hit} (={int(hit/len(test_dataset.X)*100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
-            file.write(f'Tanimoto similarity >= 1.0: {sum_score_1} (={int(sum_score_1/len(test_dataset.X)*100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
-            file.write(f'Tanimoto similarity >= 0.9: {sum_score_09} (={int(sum_score_09/len(test_dataset.X)*100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
-            file.write(f'Tanimoto similarity >= 0.6: {sum_score_06} (={int(sum_score_06/len(test_dataset.X)*100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
-            file.write('The Tanimoto similarity is calculated using the RDKit Fingerprint and the Dice similarity metric.\n')
+            file.write(
+                f'Correct smiles predictions: {hit} (={int(hit / len(test_dataset.X) * 100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
+            file.write(
+                f'Tanimoto similarity >= 1.0: {sum_score_1} (={int(sum_score_1 / len(test_dataset.X) * 100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
+            file.write(
+                f'Tanimoto similarity >= 0.9: {sum_score_09} (={int(sum_score_09 / len(test_dataset.X) * 100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
+            file.write(
+                f'Tanimoto similarity >= 0.6: {sum_score_06} (={int(sum_score_06 / len(test_dataset.X) * 100)}%). Test set contains in total {len(test_dataset.X)} compounds.\n')
+            file.write(
+                'The Tanimoto similarity is calculated using the RDKit Fingerprint and the Dice similarity metric.\n')
 
     return res
 
@@ -464,10 +475,11 @@ def convert_to_serializable(obj):
     elif isinstance(obj, np.ndarray):  # convert numpy arrays
         return obj.tolist()
     else:
-        return obj  # return as-is if already serializable  
+        return obj  # return as-is if already serializable
 
 
-def DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=None, model_name_extension=None, encoding_length=None, debug=False):
+def DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=None, model_name_extension=None,
+                          encoding_length=None, debug=False):
     '''
     Evaluate the model on the test dataset.
     :param X_test: Test data
@@ -492,7 +504,7 @@ def DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=None, mode
     with open(selfies_group_dict_path, 'r') as json_file:
         selfies_group_dict = json.load(json_file)
 
-    if encoding_length is None: encoding_length = int(os.getenv("ENCODING_BITS"))*int(os.getenv("MAX_SELFIES_LENGTH"))
+    if encoding_length is None: encoding_length = int(os.getenv("ENCODING_BITS")) * int(os.getenv("MAX_SELFIES_LENGTH"))
 
     with open(model_parameters_path, 'r') as json_file:
         model_parameters = json.load(json_file)
@@ -503,8 +515,8 @@ def DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=None, mode
         layer_sizes=model_parameters['layer_sizes'],
         dropouts=model_parameters['dropouts'],
         learning_rate=model_parameters['learning_rate'],
-        batch_size = model_parameters['batch_size'],
-        model_dir = model_path
+        batch_size=model_parameters['batch_size'],
+        model_dir=model_path
     )
     model.restore()
 
@@ -542,13 +554,15 @@ def DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=None, mode
         'SELFIES_similarity': -0.1
     }
 
-    tp_fp_metrics = eval_results(predictions, test_dataset, model_summary_path=model_summary_path, encoding_length=encoding_length, debug=debug, print_results=debug)
+    tp_fp_metrics = eval_results(predictions, test_dataset, model_summary_path=model_summary_path,
+                                 encoding_length=encoding_length, debug=debug, print_results=debug)
 
     results['true_positives'] = tp_fp_metrics['true_positives']
     results['false_positives'] = tp_fp_metrics['false_positives']
 
-
-    pred_similarity = eval_model(predictions, selfies_group_dict, test_dataset, selfies_X_test, model_name=model_name_full, model_folder=model_directory, model_summary_path=model_summary_path, debug=debug)
+    pred_similarity = eval_model(predictions, selfies_group_dict, test_dataset, selfies_X_test,
+                                 model_name=model_name_full, model_folder=model_directory,
+                                 model_summary_path=model_summary_path, debug=debug)
 
     results['prediction_rates'] = pred_similarity['prediction_simiarity_rates']
     results['prediction_values'] = pred_similarity['prediction_similarity_values']
@@ -561,22 +575,24 @@ def DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=None, mode
     with open(model_evaluation_path, "w") as json_file:
         json.dump(ser_res, json_file, indent=4)
 
-
     with open(f'{model_directory}/.done', 'w') as binary_file:
         # Write binary data to the file
-        binary_file.write('This model has been successfully trained and evaluated.\nThis file is a marker for it. \nDO NOT DELETE!')
+        binary_file.write(
+            'This model has been successfully trained and evaluated.\nThis file is a marker for it. \nDO NOT DELETE!')
 
     return results['prediction_rates']['correct']
 
 
-def DC_multitask_optimizer(rounds=50, training_epochs=50, model_name_=None, start_round=1, manual_combinations=None, debug=False):
+def DC_multitask_optimizer(rounds=50, training_epochs=50, model_name_=None, start_round=1, manual_combinations=None,
+                           fixed_hyperparameters=[-1, -1, -1.0, -1, -1.0], debug=False):
     '''
     Optimize the model using a random search approach. The length of the encoding is determined by the length of the SELFIES parts dictionary * the max selfies lenght from the .env file.
-    :param rounds: Number of rounds to optimize the model
+    :param rounds: Number of rounds to optimize the model. Set it to 0 to only train models with hyperparameters given at manual_combinations
     :param training_epochs: Number of epochs to train the model
     :param model_name_: Name of the model to optimize. If none, it will be retrieved from the .env file
     :param start_round: The round to start the optimization
     :param manual_combinations: Manually specify the combinations to use (as first combinations) (list of dictionaries)
+    :param fixed_hyperparameters: Fixed hyperparameters to use for the optimization. No fixed hyperparameter by defalut. (list of values in the following order: [nb_hidden_layers, hidden_layers, learning_rate, batch_size, dropout])
     :param debug: If debug information should be printed
     :return:
     '''
@@ -584,11 +600,12 @@ def DC_multitask_optimizer(rounds=50, training_epochs=50, model_name_=None, star
     base_model_name = os.getenv("MODEL_NAME") if model_name_ is None else model_name_
 
     # Load the data
-    X_train = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("X_TRAIN")}')#.loc[:30]
-    X_test = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("X_TEST")}')#.loc[:30]
-    y_train = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("Y_TRAIN")}')#.loc[:30]
-    y_test = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("Y_TEST")}')#.loc[:30]
-    selfies_X_test = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/selfies_X_test.pkl')#.loc[:30]
+    X_train = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("X_TRAIN")}')  # .loc[:30]
+    X_test = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("X_TEST")}')  # .loc[:30]
+    y_train = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("Y_TRAIN")}')  # .loc[:30]
+    y_test = pd.read_pickle(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/{os.getenv("Y_TEST")}')  # .loc[:30]
+    selfies_X_test = pd.read_pickle(
+        f'{base}/Code/Full_systems/Selfies_Mol/Featurization/selfies_X_test.pkl')  # .loc[:30]
 
     with open(f'{base}/Code/Full_systems/Selfies_Mol/Featurization/selfies_group_dict.json', 'r') as json_file:
         selfies_group_dict = json.load(json_file)
@@ -596,19 +613,26 @@ def DC_multitask_optimizer(rounds=50, training_epochs=50, model_name_=None, star
     best_correct_pred = 0
     best_correct_pred_round = -1
 
-    hyperparameters = create_hyperparameter_combinations(rounds, manual_combinations=manual_combinations, learning_rate_= 0.001, randomize=False)#, nb_hidden_layers_= 2, hidden_layers_= [3000, 2000], learning_rate_= 0.001 , batch_size_= 100, dropout_= 0)
+    hyperparameters = create_hyperparameter_combinations(rounds, manual_combinations=manual_combinations,
+                                                         nb_hidden_layers_=fixed_hyperparameters[0],
+                                                         hidden_layers_=fixed_hyperparameters[1],
+                                                         learning_rate_=fixed_hyperparameters[2],
+                                                         batch_size_=fixed_hyperparameters[3],
+                                                         dropout_=fixed_hyperparameters[4],
+                                                         randomize=False)  # , nb_hidden_layers_= 2, hidden_layers_= [3000, 2000], learning_rate_= 0.001 , batch_size_= 100, dropout_= 0)
 
     # create a csv that contains the hyperparameters and the results (if not exists)
     if not os.path.exists(f'{base}/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/tuning.csv'):
         with open(f'{base}/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/tuning.csv', 'w') as file:
-            file.write('round;model_full_name;layer_sizes;learning_rate;batch_size;dropout;correct_pred;start_timestamp;end_timestamp\n')
+            file.write(
+                'round;model_full_name;layer_sizes;learning_rate;batch_size;dropout;correct_pred;start_timestamp;end_timestamp\n')
 
     for i in tqdm(range(len(hyperparameters)), desc='Optimizing model', unit='model'):
 
         start_time = datetime.now()
 
         model_name_extension = f"100"
-        model_name = f"{base_model_name}_{i+start_round+1}"
+        model_name = f"{base_model_name}_{i + start_round + 1}"
 
         layer_sizes = hyperparameters[i]['layer_sizes']
         learning_rate = hyperparameters[i]['learning_rate']
@@ -618,23 +642,30 @@ def DC_multitask_optimizer(rounds=50, training_epochs=50, model_name_=None, star
         if debug: print(f'Training model {model_name}')
 
         # Train the model:
-        existed_before = DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=model_name, model_name_extension=model_name_extension, nb_epochs=training_epochs, layer_sizes=layer_sizes, learning_rate=learning_rate, batch_size=batch_size, dropouts=dropouts, debug=debug)
+        existed_before = DC_multitask_fit(X_train, y_train, selfies_group_dict, model_name_=model_name,
+                                          model_name_extension=model_name_extension, nb_epochs=training_epochs,
+                                          layer_sizes=layer_sizes, learning_rate=learning_rate, batch_size=batch_size,
+                                          dropouts=dropouts, debug=debug)
 
         if not existed_before:
 
             if debug: print(f"Evaluating the predictions for model {model_name}")
 
             # Evaluate the predictions:
-            correct_pred = DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=model_name, model_name_extension=model_name_extension, encoding_length=len(selfies_group_dict)*int(os.getenv("MAX_SELFIES_LENGTH")), debug=debug)
+            correct_pred = DC_multitask_evaluate(X_test, y_test, selfies_X_test, model_name_=model_name,
+                                                 model_name_extension=model_name_extension,
+                                                 encoding_length=len(selfies_group_dict) * int(
+                                                     os.getenv("MAX_SELFIES_LENGTH")), debug=debug)
 
             if correct_pred > best_correct_pred:
                 best_correct_pred = correct_pred
                 best_correct_pred_round = i
 
-            #print(f'The best correct prediction percentage so far is {best_correct_pred} in round {best_correct_pred_round}')
+            # print(f'The best correct prediction percentage so far is {best_correct_pred} in round {best_correct_pred_round}')
 
             with open(f'{base}/Code/Full_systems/Selfies_Mol/Multitask_Classifier/Models/tuning.csv', 'a') as file:
-                file.write(f'{i+start_round};{model_name}_{model_name_extension};{layer_sizes};{learning_rate};{batch_size};{dropouts};{correct_pred};{start_time};{datetime.now()}\n')
+                file.write(
+                    f'{i + start_round};{model_name}_{model_name_extension};{layer_sizes};{learning_rate};{batch_size};{dropouts};{correct_pred};{start_time};{datetime.now()}\n')
 
 
 if __name__ == '__main__':
