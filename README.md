@@ -33,4 +33,4 @@ J. Mommers, L. Barta, and M. Pietrasik, “MASSISTANT: A Deep Learning Model for
 
 ## Contact
 [Lazar Barta](mailto:ld.barta@student.maastrichtuniversity.nl), 
-[John Mommers](mailto:john.mommers@envalior.com)
+[John Mommers](mailto:john.mommers@Envalior.com)
