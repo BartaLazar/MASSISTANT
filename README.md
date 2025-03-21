@@ -5,7 +5,7 @@
 
 ## What is MASSISTANT?
 
-MASSISTANT is a tool for predicting de novo SELFIES representation of a molecule from its EI mass spectra. Developed by Lazar Barta at Envalior Materials as part of a master internship at Maastricht University. 
+MASSISTANT is a tool for predicting de novo SELFIES representation of a molecule from its EI mass spectrum. Developed by Lazar Barta at Envalior Materials as part of a master internship at Maastricht University. 
 
 **Disclaimer**: The models were trained on the commercial NIST EI mass spectra dataset and is not provided. You can find an example of the required format in the `Dataset` folder.
 
