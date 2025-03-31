@@ -28,8 +28,11 @@ Will be available soon.
 ## Find out more
 Read our publication MASSISTANT: A Deep Learning Model for De Novo Molecular Structure Prediction from EI‑MS Spectra via SELFIES Encoding at this [link](https://chemrxiv.org/engage/chemrxiv/article-details/67d9484d6dde43c9083d4dde).
 
+## Docker image
+A Docker image containing the environment and the files will be available soon.
+
 ## Quote
-J. Mommers, L. Barta, and M. Pietrasik, “MASSISTANT: A Deep Learning Model for De Novo Molecular Structure Prediction from EI‑MS Spectra via SELFIES Encoding,” Mar. 19, 2025, ChemRxiv. doi: 10.26434/chemrxiv-2025-qchjl.
+J. Mommers, L. Barta, M. Pietrasik, and A. Wilbik, “MASSISTANT: A Deep Learning Model for De Novo Molecular Structure Prediction from EI‑MS Spectra via SELFIES Encoding,” Mar. 19, 2025, ChemRxiv. doi: 10.26434/chemrxiv-2025-qchjl.
 
 ## Contact
 [Lazar Barta](mailto:ld.barta@student.maastrichtuniversity.nl), 
