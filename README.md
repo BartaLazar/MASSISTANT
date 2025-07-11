@@ -32,7 +32,7 @@ Read our publication MASSISTANT: A Deep Learning Model for De Novo Molecular Str
 A Docker image containing the environment and the files will be available soon.
 
 ## Quote
-J. Mommers, L. Barta, M. Pietrasik, and A. Wilbik, “MASSISTANT: A Deep Learning Model for De Novo Molecular Structure Prediction from EI‑MS Spectra via SELFIES Encoding,” Mar. 19, 2025, ChemRxiv. doi: 10.26434/chemrxiv-2025-qchjl.
+J. Mommers, L. Barta, M. Pietrasik, and A. Wilbik, “MASSISTANT: A Deep Learning Model for De Novo Molecular Structure Prediction from EI‑MS Spectra via SELFIES Encoding,” Journal of Chromatography A, p. 466216, Jul. 2025, doi: 10.1016/j.chroma.2025.466216.
 
 ## Contact
 [Lazar Barta](mailto:ld.barta@student.maastrichtuniversity.nl), 
