@@ -26,7 +26,7 @@ Will be available soon.
 `.rootfloder` is a marker file to indicate the root folder of the project. It is used by the scripts to navigate to the root folder of the project. **Do not delete this file.**
 
 ## Find out more
-Read our publication MASSISTANT: A Deep Learning Model for De Novo Molecular Structure Prediction from EI‑MS Spectra via SELFIES Encoding at this [link](https://chemrxiv.org/engage/chemrxiv/article-details/67d9484d6dde43c9083d4dde).
+Read our publication MASSISTANT: A Deep Learning Model for De Novo Molecular Structure Prediction from EI‑MS Spectra via SELFIES Encoding at this [link](https://www.sciencedirect.com/science/article/pii/S002196732500562X#refdata001).
 
 ## Docker image
 A Docker image containing the environment and the files will be available soon.
